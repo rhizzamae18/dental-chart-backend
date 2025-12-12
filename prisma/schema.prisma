@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+
 }
 
 datasource db {
@@ -54,8 +55,8 @@ model Patient{
 model DentalHistory {
   id                  String    @id @default(uuid())
   patientId           String    @unique
-  previousDentist     String
-  lastDentalVisit     String
+  previousDentist     String?
+  lastDentalVisit     String?
 
   patient             Patient   @relation(fields: [patientId], references:[id], onDelete: Cascade)
 }
@@ -64,10 +65,10 @@ model MedicalHistory {
   id                        String    @id @default(uuid())
   patientId                 String    @unique
 
-  physicianName             String      
-  physicianAddress          String
-  physicianSpecialty        String
-  physicianOfficeNumber     String
+  physicianName             String?      
+  physicianAddress          String?
+  physicianSpecialty        String?
+  physicianOfficeNumber     String?
   goodHealth                YesNo?
   underMedicalTreatment     YesNo?
   medicalConditionBeingTreated String?

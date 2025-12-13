@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 config();
-import express, { Express } from "express";
 
+import express, { Express } from "express";
 import uploadRoutes from "./routes/upload.routes";
 
 const app: Express = express();

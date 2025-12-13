@@ -16,15 +16,7 @@ export const extractFormData = async (
     contents: [
       {
         role: "user",
-        parts: [
-          { text: prompt },
-          {
-            inlineData: {
-              data: buffer.toString("base64"),
-              mimeType: mimeType,
-            },
-          },
-        ],
+        parts: [{ text: prompt }, image],
       },
     ],
     generationConfig: {

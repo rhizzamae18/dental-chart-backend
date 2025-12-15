@@ -1,0 +1,314 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Patient {
+  id                 String          @id @default(uuid())
+  lastName           String?
+  firstName          String?
+  middleName         String?
+  birthdate          DateTime?
+  age                Int?
+  sex                Sex?
+  religion           String?
+  nickname           String?
+  homeAddress        String?
+  homeNo             String?
+  occupation         String?
+  officeNo           String?
+  dentalInsurance    String?
+  faxNo              String?
+  effectiveDate      DateTime?
+  cellMobileNo       String?
+  emailAddress       String?
+  parentGuardianName String?
+  parentOccupation   String?
+  referredBy         String?
+  consultationReason String?
+  dentalChart        DentalChart?
+  dentalHistory      DentalHistory?
+  medicalHistory     MedicalHistory?
+}
+
+model DentalHistory {
+  id              String  @id @default(uuid())
+  patientId       String  @unique
+  previousDentist String?
+  lastDentalVisit String?
+  patient         Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
+model MedicalHistory {
+  id                           String             @id @default(uuid())
+  patientId                    String             @unique
+  physicianName                String?
+  physicianAddress             String?
+  physicianSpecialty           String?
+  physicianOfficeNumber        String?
+  goodHealth                   YesNo?
+  underMedicalTreatment        YesNo?
+  medicalConditionBeingTreated String?
+  seriousIllnessSurgery        YesNo?
+  illnessOrOperationDetails    String?
+  hospitalized                 YesNo?
+  hospitalizationDetails       String?
+  takingMedication             YesNo?
+  medicationDetails            String?
+  useTobacco                   YesNo?
+  useAlcoholDrugs              YesNo?
+  bleedingTime                 String?
+  bloodType                    String?
+  bloodPressure                String?
+  forWomenOnly                 ForWomenOnly?
+  allergies                    MedicalAllergies?
+  medicalConditions            MedicalConditions?
+  patient                      Patient            @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
+model MedicalAllergies {
+  id               String         @id @default(uuid())
+  medicalHistoryId String         @unique
+  localAnesthetic  YesNo?
+  penicillin       YesNo?
+  antibiotics      YesNo?
+  sulfaDrugs       YesNo?
+  aspirin          YesNo?
+  latex            YesNo?
+  others           String?
+  medicalHistory   MedicalHistory @relation(fields: [medicalHistoryId], references: [id], onDelete: Cascade)
+}
+
+model ForWomenOnly {
+  id                 String         @id @default(uuid())
+  medicalHistoryId   String         @unique
+  pregnant           YesNo?
+  nursing            YesNo?
+  takingBirthControl YesNo?
+  medicalHistory     MedicalHistory @relation(fields: [medicalHistoryId], references: [id], onDelete: Cascade)
+}
+
+model MedicalConditions {
+  id                         String         @id @default(uuid())
+  medicalHistoryId           String         @unique
+  highBloodPressure          Boolean?
+  lowBloodPressure           Boolean?
+  epilepsyConvulsions        Boolean?
+  aidsHivInfection           Boolean?
+  sexuallyTransmittedDisease Boolean?
+  stomachTroublesUlcers      Boolean?
+  faintingSeizure            Boolean?
+  rapidWeightLoss            Boolean?
+  radiationTherapy           Boolean?
+  jointReplacementImplant    Boolean?
+  heartSurgery               Boolean?
+  heartAttack                Boolean?
+  thyroidProblem             Boolean?
+  heartDisease               Boolean?
+  heartMurmur                Boolean?
+  hepatitisLiverDisease      Boolean?
+  rheumaticFever             Boolean?
+  hayFeverAllergies          Boolean?
+  respiratoryProblems        Boolean?
+  hepatitisJaundice          Boolean?
+  tuberculosis               Boolean?
+  swollenAnkles              Boolean?
+  kidneyDisease              Boolean?
+  diabetes                   Boolean?
+  chestPain                  Boolean?
+  stroke                     Boolean?
+  cancerTumors               Boolean?
+  anemia                     Boolean?
+  angina                     Boolean?
+  asthma                     Boolean?
+  emphysema                  Boolean?
+  bleedingProblems           Boolean?
+  bloodDiseases              Boolean?
+  headInjuries               Boolean?
+  arthritisRheumatism        Boolean?
+  other                      String?
+  medicalHistory             MedicalHistory @relation(fields: [medicalHistoryId], references: [id], onDelete: Cascade)
+}
+
+model DentalChart {
+  id          String                @id @default(uuid())
+  patientId   String                @unique
+
+  appliances  Appliances[]
+  patient     Patient               @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  occlusion   Occlusion?
+  periodontal PeriodontalScreening?
+  tmd         Tmd[]
+  teeth       ToothFinding[]
+
+
+  informedConsent InformedConsent?
+  treatmentRecord TreatmentRecord[]
+
+}
+
+model ToothFinding {
+  id            String             @id @default(uuid())
+  dentalChartId String
+  toothNumber   String
+  condition     ToothCondition?
+  dentalChart   DentalChart        @relation(fields: [dentalChartId], references: [id], onDelete: Cascade)
+  restorations  ToothRestoration[]
+  surgeries     ToothSurgery[]
+
+  @@unique([dentalChartId, toothNumber])
+}
+
+model ToothRestoration {
+  id      String          @id @default(uuid())
+  toothId String
+  type    RestorationType
+  tooth   ToothFinding    @relation(fields: [toothId], references: [id])
+}
+
+model ToothSurgery {
+  id           String       @id @default(uuid())
+  toothId      String
+  toothSurgery SurgeryType
+  tooth        ToothFinding @relation(fields: [toothId], references: [id])
+}
+
+model PeriodontalScreening {
+  id                     String      @id @default(uuid())
+  dentalChartId          String      @unique
+  gingivitis             Boolean      @default(false)
+  earlyPeriodontitis     Boolean      @default(false)
+  moderatePeriodontitis  Boolean      @default(false)
+  advancedPeriodontitis Boolean       @default(false)
+  form                   DentalChart @relation(fields: [dentalChartId], references: [id])
+}
+
+model Occlusion {
+  id               String      @id @default(uuid())
+  dentalChartId    String      @unique
+  molarClass       Boolean     @default(false)  
+  overjet          Boolean     @default(false)
+  overbite         Boolean     @default(false)
+  midlineDeviation Boolean     @default(false)
+  crossbite        Boolean     @default(false)
+  form             DentalChart @relation(fields: [dentalChartId], references: [id])
+}
+
+model Appliances {
+  id            String      @id @default(uuid())
+  dentalChartId String
+  orthodontic   Boolean     @default(false)
+  stayplate     Boolean     @default(false)
+  others        String?
+  form          DentalChart @relation(fields: [dentalChartId], references: [id])
+}
+
+model Tmd {
+  id            String      @id @default(uuid())
+  dentalChartId String
+  clenching     Boolean     @default(false)
+  clicking      Boolean     @default(false)
+  trismus       Boolean     @default(false)
+  muscleSpasm   Boolean     @default(false)
+  form          DentalChart @relation(fields: [dentalChartId], references: [id])
+}
+
+enum Sex {
+  M
+  F
+}
+
+enum YesNo {
+  Yes
+  No
+}
+
+enum ToothCondition {
+  PRESENT
+  DECAYED
+  MISSING_CARIES
+  MISSING_OTHER
+  IMPACTED
+  SUPERNUMERARY
+  ROOT_FRAGMENT
+  UNERUPTED
+}
+
+enum RestorationType {
+  AM
+  CO
+  JC
+  AB
+  ATT
+  P
+  IN
+  IMP
+  S
+  RM
+}
+
+enum SurgeryType {
+  EXTRACTION_CARIES
+  EXTRACTION_OTHER
+}
+
+model InformedConsent {
+  id     String   @id @default(uuid())
+  dentalChartId String  @unique
+
+  treatment               Boolean @default(false)
+  treatmentInitial        String?
+
+  drugsMedication         Boolean @default(false)
+  drugsMedicationInitial  String?
+
+  changesInPlan           Boolean @default(false)
+  changesInPlanInitial    String?
+
+  radiograph              Boolean @default(false)
+  radiographInitial       String?
+
+  removalOfTeeth          Boolean @default(false)
+  removalOfTeethInitial   String?
+
+  crownsBridges           Boolean @default(false)
+  crownsBridgesInitial    String?
+
+  endodontics             Boolean @default(false)
+  endodonticsInitial      String?
+
+  fillings                Boolean @default(false)
+  fillingsInitial         String?
+
+  dentures                Boolean @default(false)
+  denturesInitial         String?
+
+  patientSignature   String?
+  dentistSignature   String?
+  signedDate         DateTime?
+
+  form   DentalChart    @relation(fields: [dentalChartId], references: [id], onDelete: Cascade)
+}
+
+model TreatmentRecord {
+  id        String        @id @default(uuid())
+  
+  dentalChartId String   
+
+  date      DateTime?     
+  toothQuantity String?  
+  procedure   String?    
+  dentist      String?
+  amountCharged Int?
+  amountPaid    Int?
+  balance       Int?
+  nextAppointment DateTime? 
+
+  form  DentalChart   @relation(fields: [dentalChartId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}

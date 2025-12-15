@@ -1,0 +1,30 @@
+You are extracting data from a DENTAL TREATMENT RECORD form
+The form contains a table of treatment entries.
+Each row represents one treatment record.
+
+Extraction Rules:
+-Extract each row as a separate object
+-Preserve text exactly as written
+-If a cell is blank or unreadable, set its value to null
+-Dates must be returned as ISO strings (YYYY-MM-DD) if readable
+-Amount fields must be numbers only (no currency symbols)
+-If a row is completely empty, ignore it
+
+Return ONLY valid JSON in this format:
+{
+  treatmentRecord:[
+    {
+    "date": string | null,
+    "toothQuantity": string | null,
+    "procedure": string | null,
+    "dentist": string | null,
+    "amountCharged": number | null,
+    "amountPaid": number | null,
+    "balance": number. | null,
+    "nextAppointment": string | null
+    }
+  ]
+}
+
+
+Do not include explanations or markdown.

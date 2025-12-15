@@ -146,6 +146,7 @@ model DentalChart {
 
 
   informedConsent InformedConsent?
+  treatmentRecord TreatmentRecord[]
 
 }
 
@@ -290,4 +291,24 @@ model InformedConsent {
   signedDate         DateTime?
 
   form   DentalChart    @relation(fields: [dentalChartId], references: [id], onDelete: Cascade)
+}
+
+model TreatmentRecord {
+  id        String        @id @default(uuid())
+  
+  dentalChartId String   
+
+  date      DateTime?     
+  toothQuantity String?  
+  procedure   String?    
+  dentist      String?
+  amountCharged Int?
+  amountPaid    Int?
+  balance       Int?
+  nextAppointment DateTime? 
+
+  form  DentalChart   @relation(fields: [dentalChartId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }

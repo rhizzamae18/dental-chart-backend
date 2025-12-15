@@ -112,6 +112,6 @@ export const uploadPage3Form = async (req: Request, res: Response) => {
     console.error(error);
     return res
       .status(500)
-      .json({ error: "Failed to process page 2", detail: error.message });
+      .json({ error: "Failed to process page 3", detail: error.message });
   }
 };

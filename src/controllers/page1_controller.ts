@@ -13,13 +13,25 @@ export const uploadPage1Form = async (req: Request, res: Response) => {
   }
 
   try {
+    console.log("📄 Processing Page 1...");
+    
     const extractedData = await extractFormData(
       file.buffer,
       file.mimetype,
       prompt
     );
 
+    console.log("📊 Page 1 Extracted Data:", JSON.stringify(extractedData, null, 2));
+
+    if (!extractedData || typeof extractedData !== 'object') {
+      throw new Error("Invalid extracted data format");
+    }
+
     const { patient, dentalHistory, medicalHistory } = extractedData;
+
+    if (!patient) {
+      throw new Error("No patient data found in extracted data");
+    }
 
     const mappedPatient = {
       ...patient,
@@ -59,10 +71,12 @@ export const uploadPage1Form = async (req: Request, res: Response) => {
       extractedData
     });
   } catch (error: any) {
-    console.error(error);
+    console.error("❌ Page 1 Error:", error);
+    console.error("Stack:", error.stack);
     return res.status(500).json({
       error: "Failed to process page 1",
       detail: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };

@@ -57,8 +57,9 @@ export const uploadPage4Form = async (req: Request, res: Response) => {
     });
 
     return res.json({
-      sucess: true,
+      success: true,
       dentalChartId: chart.id,
+      extractedData
     });
   } catch (error: any) {
     console.error(error);

@@ -124,6 +124,7 @@ export const uploadPage2Form = async (req: Request, res: Response) => {
     return res.json({
       success: true,
       dentalChartId: chart.id,
+      extractedData
     });
   } catch (error: any) {
     console.error(error);

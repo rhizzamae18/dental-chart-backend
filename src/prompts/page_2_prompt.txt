@@ -31,7 +31,7 @@ RULES:
     "advancedPeriodontitis": false
   },
   "occlusion": {
-    "molarClass":false,
+    "molarClass": "Class I",
     "overjet": false,
     "overbite": false,
     "midlineDeviation": false,
@@ -46,7 +46,7 @@ RULES:
     "clenching": false,
     "clicking": false,
     "trismus": false,
-    "muscleSpasm" false
+    "muscleSpasm": false
   }
 }
 
@@ -59,4 +59,7 @@ AM, CO, JC, AB, ATT, P, IN, IMP, S, RM
 
 SurgeryType:
 EXTRACTION_CARIES, EXTRACTION_OTHER
+
+MolarClass (String):
+"Class I", "Class II", "Class III", or null
 `;

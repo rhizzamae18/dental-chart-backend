@@ -53,7 +53,11 @@ export const uploadPage1Form = async (req: Request, res: Response) => {
       })
     );
 
-    return res.json({ success: true, patientId: saveForm.id });
+    return res.json({
+      success: true,
+      patientId: saveForm.id,
+      extractedData
+    });
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({
